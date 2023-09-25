@@ -1,10 +1,12 @@
-import { parse } from "./Phonetic/phonetic";
+import { Phonetic } from "./Phonetic/phonetic";
+
+const phonetic = new Phonetic();
 
 // Handle input events for <input>, <textarea>, and <select> elements
 document.addEventListener("input", function (event) {
   const target = event.target;
   if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-    parse(target.value);
+    console.log(phonetic.parse(target.value))
   }
 });
 
@@ -16,7 +18,7 @@ const observer = new MutationObserver(function (mutations) {
       target = target.parentNode;
     }
     if (target && target.isContentEditable) {
-      parse(target.value);
+      console.log(phonetic.parse(target.innerText))
     }
   });
 });

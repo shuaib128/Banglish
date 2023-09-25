@@ -1,0 +1,26 @@
+{
+  "name": "banglish",
+  "version": "1.0.0",
+  "description": "A Chrome Extension to write Bangla with English.",
+  "main": "contentScript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuaib128/Banglish.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuaib128/Banglish/issues"
+  },
+  "homepage": "https://github.com/shuaib128/Banglish#readme",
+  "devDependencies": {
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}

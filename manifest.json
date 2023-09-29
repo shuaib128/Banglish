@@ -20,7 +20,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/bundle.js"]
+      "js": ["dist/bundle.js"],
+      "run_at": "document_end"
     }
   ],
   "background": {

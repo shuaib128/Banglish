@@ -1,0 +1,14 @@
+.main{
+    width: 400px;
+    height: 250px;
+    border: 1px solid bisque;
+}
+
+#main-textarea{
+    width: calc(400px - 40px);
+    height: 250px;
+    resize: none;
+    padding: 10px 15px;
+    border: none;
+    font-size: 15px;
+}

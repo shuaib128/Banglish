@@ -4,7 +4,6 @@
   "version": "1.0",
   "description": "A Chrome Extension to write Bangla with English.",
   "action": {
-    "default_popup": "index.html",
     "default_icon": {
       "16": "logo192.png",
       "48": "logo192.png",
@@ -16,15 +15,15 @@
     "48": "logo192.png",
     "128": "logo192.png"
   },
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage", "http://*/*", "https://*/*"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/bundle.js"],
+      "js": ["dist/contentScript.bundle.js"],
       "run_at": "document_end"
     }
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "dist/background.bundle.js"
   }
 }

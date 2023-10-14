@@ -1,11 +1,15 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./contentScript.js",
+  entry: {
+    contentScript: "./contentScript.js",
+    background: './background.js',
+    main: "./main.js",
+  },
   output: {
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   mode: "development",
 };

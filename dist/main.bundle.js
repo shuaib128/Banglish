@@ -1764,9 +1764,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   phoneticPreview: () => (/* binding */ phoneticPreview)
 /* harmony export */ });
 const phoneticPreview = (value, event) => {
-  // Extract the last word from the inputValue
-  const words = value.split(/\s+/);
-  const lastWord = words[words.length - 1]
+  const targetElement = event.target || document.activeElement;
+
+  // Get cursor's current position
+  const cursorPosition = targetElement.selectionStart;
+
+  // Extract the word where the cursor is currently located
+  const valueUpToCursor = value.substring(0, cursorPosition);
+  const words = valueUpToCursor.split(/\s+/);
+  const currentWord = words[words.length - 1];
 
   // Create a tooltip element to show the preview
   let tooltip = document.getElementById("banglish-tooltip");
@@ -1779,15 +1785,15 @@ const phoneticPreview = (value, event) => {
     tooltip.style.padding = "3px";
     tooltip.style.display = "none";
     tooltip.style.zIndex = "2147483647";
-    tooltip.style.color = "black"
+    tooltip.style.color = "black";
     document.body.appendChild(tooltip);
   }
 
   // Position the tooltip near the input/textarea and show the translated text
-  const rect = event.target.getBoundingClientRect();
+  const rect = targetElement.getBoundingClientRect();
   tooltip.style.left = `${rect.left}px`;
-  tooltip.style.top = `${rect.bottom + window.scrollY}px`;
-  tooltip.textContent = lastWord;
+  tooltip.style.top = `0px`;
+  tooltip.textContent = currentWord;
   tooltip.style.display = "block";
 };
 
@@ -2037,9 +2043,9 @@ class Phonetic {
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!**************************!*\
-  !*** ./contentScript.js ***!
-  \**************************/
+/*!*****************!*\
+  !*** ./main.js ***!
+  \*****************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Phonetic_phonetic__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Phonetic/phonetic */ "./Phonetic/phonetic.js");
 /* harmony import */ var _Phonetic_phonetc_preview__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Phonetic/phonetc-preview */ "./Phonetic/phonetc-preview.js");
@@ -2048,78 +2054,45 @@ __webpack_require__.r(__webpack_exports__);
 
 const phonetic = new _Phonetic_phonetic__WEBPACK_IMPORTED_MODULE_0__.Phonetic();
 
-// Add an event listener to the document to handle input events
-document.addEventListener("input", function (event) {
-  // Get the target element that triggered the input event
-  const target = event.target;
+document.addEventListener("DOMContentLoaded", function () {
+  const textarea = document.getElementById("main-textarea");
 
-  // Check if the target is an <input> element or a <textarea> element
-  if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-    // Retrieve the current value from the target input/textarea
-    const value = target.value;
-
-    // Parse the input value to obtain the translated Bangla representation
-    let translated_bangla_value = phonetic.parse(value);
-
-    // If the last character in the input value is a space,
-    // replace the input value with the translated Bangla value
-    if (value.charAt(value.length - 1) === " ") {
-      // Update the input value
-      target.value = translated_bangla_value;
-
-      // Dispatch an 'input' event to notify listeners of the change
-      target.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-
-    // Display a tooltip showing the translated Bangla value
-    // near the target input/textarea
-    (0,_Phonetic_phonetc_preview__WEBPACK_IMPORTED_MODULE_1__.phoneticPreview)(translated_bangla_value, event);
-  }
-});
-
-
-// Instantiate a new MutationObserver which will monitor changes in the DOM.
-const observer = new MutationObserver(function (mutations) {
-  // Iterate through each mutation observed
-  mutations.forEach(function (mutation) {
-    // Start with the target of the mutation
-    let target = mutation.target;
-
-    // Traverse up the tree to find the closest parent that is contentEditable
-    while (target && !target.isContentEditable) {
-      target = target.parentNode;
-    }
-
-    // If a contentEditable parent is found
-    if (target && target.isContentEditable) {
-      // Retrieve the textual content of the editable element
-      const content = target.innerText;
-
-      // Parse the content to get the translated bangla value
-      let translated_bangla_value = phonetic.parse(content);
-
-      // Show a tooltip with the translated bangla value,
-      // positioned relative to the target element
-      (0,_Phonetic_phonetc_preview__WEBPACK_IMPORTED_MODULE_1__.phoneticPreview)(translated_bangla_value, target);
+  textarea.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+      // If Enter key is pressed, prevent the newline
+      event.preventDefault();
     }
   });
+
+  textarea.addEventListener("keyup", function (event) {
+    const target = event.target;
+    const value = textarea.value;
+
+    if (event.keyCode === 32 || event.keyCode === 13) {
+      // Parse the input value to obtain the translated Bangla representation
+      let translated_bangla_value = phonetic.parse(value);
+
+      // Store the current cursor position
+      const cursorPosition = target.selectionStart;
+
+      // Update the input value if a space or enter key is pressed
+      target.value = translated_bangla_value;
+
+      // Restore the cursor position
+      target.setSelectionRange(cursorPosition, cursorPosition);
+    }
+  });
+
+  // Input event for phoneticPreview
+  textarea.addEventListener("input", function (event) {
+    const value = textarea.value;
+    let translated_bangla_value = phonetic.parse(value);
+    (0,_Phonetic_phonetc_preview__WEBPACK_IMPORTED_MODULE_1__.phoneticPreview)(translated_bangla_value, event);
+  });
 });
-
-
-// Configure the MutationObserver to listen for characterData
-// changes and childList changes
-const config = {
-  characterData: true,
-  childList: true,
-  subtree: true,
-};
-
-
-// Attach the MutationObserver to the document body
-observer.observe(document.body, config);
 
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=main.bundle.js.map

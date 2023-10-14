@@ -1,7 +1,13 @@
 export const phoneticPreview = (value, event) => {
-  // Extract the last word from the inputValue
-  const words = value.split(/\s+/);
-  const lastWord = words[words.length - 1]
+  const targetElement = event.target || document.activeElement;
+
+  // Get cursor's current position
+  const cursorPosition = targetElement.selectionStart;
+
+  // Extract the word where the cursor is currently located
+  const valueUpToCursor = value.substring(0, cursorPosition);
+  const words = valueUpToCursor.split(/\s+/);
+  const currentWord = words[words.length - 1];
 
   // Create a tooltip element to show the preview
   let tooltip = document.getElementById("banglish-tooltip");
@@ -14,14 +20,14 @@ export const phoneticPreview = (value, event) => {
     tooltip.style.padding = "3px";
     tooltip.style.display = "none";
     tooltip.style.zIndex = "2147483647";
-    tooltip.style.color = "black"
+    tooltip.style.color = "black";
     document.body.appendChild(tooltip);
   }
 
   // Position the tooltip near the input/textarea and show the translated text
-  const rect = event.target.getBoundingClientRect();
+  const rect = targetElement.getBoundingClientRect();
   tooltip.style.left = `${rect.left}px`;
-  tooltip.style.top = `${rect.bottom + window.scrollY}px`;
-  tooltip.textContent = lastWord;
+  tooltip.style.top = `0px`;
+  tooltip.textContent = currentWord;
   tooltip.style.display = "block";
 };

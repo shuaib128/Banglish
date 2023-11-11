@@ -9,25 +9,27 @@ export const phoneticPreview = (value, event) => {
   const words = valueUpToCursor.split(/\s+/);
   const currentWord = words[words.length - 1];
 
-  // Create a tooltip element to show the preview
-  let tooltip = document.getElementById("banglish-tooltip");
-  if (!tooltip) {
-    tooltip = document.createElement("div");
-    tooltip.id = "banglish-tooltip";
-    tooltip.style.position = "fixed";
-    tooltip.style.backgroundColor = "rgb(255 176 0)";
-    tooltip.style.border = "1px solid #ccc";
-    tooltip.style.padding = "3px";
-    tooltip.style.display = "none";
-    tooltip.style.zIndex = "2147483647";
-    tooltip.style.color = "black";
-    document.body.appendChild(tooltip);
-  }
+  if (currentWord.length !== 0) {
+    // Create a tooltip element to show the preview
+    let tooltip = document.getElementById("banglish-tooltip");
+    if (!tooltip) {
+      tooltip = document.createElement("div");
+      tooltip.id = "banglish-tooltip";
+      tooltip.style.position = "fixed";
+      tooltip.style.backgroundColor = "rgb(255 176 0)";
+      tooltip.style.border = "1px solid #ccc";
+      tooltip.style.padding = "3px";
+      tooltip.style.display = "none";
+      tooltip.style.zIndex = "2147483647";
+      tooltip.style.color = "black";
+      document.body.appendChild(tooltip);
+    }
 
-  // Position the tooltip near the input/textarea and show the translated text
-  const rect = targetElement.getBoundingClientRect();
-  tooltip.style.left = `${rect.left}px`;
-  tooltip.style.top = `0px`;
-  tooltip.textContent = currentWord;
-  tooltip.style.display = "block";
+    // Position the tooltip near the input/textarea and show the translated text
+    const rect = targetElement.getBoundingClientRect();
+    tooltip.style.left = `${rect.left}px`;
+    tooltip.style.top = `0px`;
+    tooltip.textContent = currentWord;
+    tooltip.style.display = "block";
+  }
 };
